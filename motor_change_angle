@@ -1,0 +1,21 @@
+import Jetson.GPIO as GPIO
+import time
+
+SERVO_PIN = 33
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(SERVO_PIN, GPIO.OUT)
+
+pwm = GPIO.PWM(SERVO_PIN, 50)   # freq = 50hz, Period = 20ms
+pwm.start((1./18.)*100 +2)                  # pwm start (period 20ms, period 3% (signal = high)
+
+for t_high in range(0, 20):   # 30-125 range
+    desiredPosition = float(input('Move X : '))
+    DC = (1./18.)*(desiredPosition) + 2
+    pwm.ChangeDutyCycle(DC)
+
+
+pwm.stop()
+GPIO.cleanup()
+
