@@ -1,0 +1,23 @@
+import Jetson.GPIO as GPIO
+import time
+
+SERVO_PIN = 33
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(SERVO_PIN, GPIO.OUT)
+
+pwm = GPIO.PWM(SERVO_PIN, 50)   # freq = 50hz, Period = 20ms
+pwm.start(3.0)                  # pwm start (period 20ms, period 3% (signal = high)
+
+for t_high in range(30, 125):   # 30-125 range
+    pwm.ChangeDutyCycle(t_high/10.0)    
+    time.sleep(0.02)
+
+pwm.ChangeDutyCycle(3.0)
+time.sleep(1.0)
+pwm.ChangeDutyCycle(0.0)
+
+pwm.stop()
+GPIO.cleanup()
+
